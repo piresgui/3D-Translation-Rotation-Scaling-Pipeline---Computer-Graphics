@@ -21,6 +21,12 @@ public class Triangulo3D {
 		g.drawLine((int)C.X, (int)C.Y, (int)A.X, (int)A.Y);
 	}
 
+	public Triangulo3D projetado(Matriz4x4 m) {
+		Triangulo3D t = new Triangulo3D(A, B, C);
+		t.transforma(m);
+		return t;
+	}
+
 	public Ponto3D centro() {
 		return new Ponto3D((A.X+B.X+C.X)/3, (A.Y+B.Y+C.Y)/3, (A.Z+B.Z+C.Z)/3);
 	}
