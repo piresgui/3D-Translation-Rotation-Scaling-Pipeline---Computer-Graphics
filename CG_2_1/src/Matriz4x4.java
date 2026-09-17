@@ -87,6 +87,18 @@ public class Matriz4x4 {
 		return r;
 	}
 
+	public static Matriz4x4 rotacaoEixoPontos(Ponto3D p1, Ponto3D p2, float ang) {
+		float ux = p2.X - p1.X;
+		float uy = p2.Y - p1.Y;
+		float uz = p2.Z - p1.Z;
+
+		Matriz4x4 paraOrigem = translacao(-p1.X, -p1.Y, -p1.Z);
+		Matriz4x4 rot = rotacaoEixo(ux, uy, uz, ang);
+		Matriz4x4 devolta = translacao(p1.X, p1.Y, p1.Z);
+
+		return devolta.multiplica(rot).multiplica(paraOrigem);
+	}
+
 	public Matriz4x4 multiplica(Matriz4x4 o) {
 		Matriz4x4 r = new Matriz4x4();
 		for(int i = 0; i < 4; i++) {
