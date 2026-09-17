@@ -77,6 +77,9 @@ public class MainCanvas extends JPanel implements Runnable{
 	Ponto3D eixoP1 = new Ponto3D(450, 180, 0);
 	Ponto3D eixoP2 = new Ponto3D(450, 380, 0);
 
+	boolean projecaoObliquaAtiva = false;
+	Matriz4x4 matrizProjecaoObliqua = Matriz4x4.projecaoObliqua((float)(Math.PI/4), 0.5f);
+
 	public MainCanvas() {
 
 		File f = new File("imgbmp.bmp");
@@ -251,6 +254,9 @@ public class MainCanvas extends JPanel implements Runnable{
 				if(key == KeyEvent.VK_H) {
 					rotacionaObjetoEixo((float)(-Math.PI/16));
 				}
+				if(key == KeyEvent.VK_P) {
+					projecaoObliquaAtiva = !projecaoObliquaAtiva;
+				}
 			}
 		});
 
@@ -365,7 +371,11 @@ public class MainCanvas extends JPanel implements Runnable{
 
 		g.setColor(new Color(0,128,0));
 		for(int i = 0; i < triangulos.size();i++) {
-			triangulos.get(i).draw(g);
+			Triangulo3D t = triangulos.get(i);
+			if(projecaoObliquaAtiva) {
+				t = t.projetado(matrizProjecaoObliqua);
+			}
+			t.draw(g);
 		}
 
 		g.setColor(Color.magenta);
@@ -384,7 +394,7 @@ public class MainCanvas extends JPanel implements Runnable{
 		}
 
 		g.setColor(Color.black);
-		g.drawString("FPS "+fps+" mouse: "+mouseX+","+mouseY, 10, 25);
+		g.drawString("FPS "+fps+" mouse: "+mouseX+","+mouseY+" projecao: "+(projecaoObliquaAtiva?"obliqua":"ortogonal"), 10, 25);
 	}
 
 	public void desenhaLinhaHorizontal(int x, int y,int w) {
