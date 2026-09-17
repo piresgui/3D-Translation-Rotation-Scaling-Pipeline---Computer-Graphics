@@ -74,6 +74,9 @@ public class MainCanvas extends JPanel implements Runnable{
 
 	ArrayList<Triangulo3D> triangulos = new ArrayList<Triangulo3D>();
 
+	Ponto3D eixoP1 = new Ponto3D(450, 180, 0);
+	Ponto3D eixoP2 = new Ponto3D(450, 380, 0);
+
 	public MainCanvas() {
 
 		File f = new File("imgbmp.bmp");
@@ -242,6 +245,12 @@ public class MainCanvas extends JPanel implements Runnable{
 				if(key == KeyEvent.VK_O) {
 					transformaObjeto3D(Matriz4x4.rotacaoZ((float)(-Math.PI/16)));
 				}
+				if(key == KeyEvent.VK_Y) {
+					rotacionaObjetoEixo((float)(Math.PI/16));
+				}
+				if(key == KeyEvent.VK_H) {
+					rotacionaObjetoEixo((float)(-Math.PI/16));
+				}
 			}
 		});
 
@@ -359,6 +368,11 @@ public class MainCanvas extends JPanel implements Runnable{
 			triangulos.get(i).draw(g);
 		}
 
+		g.setColor(Color.magenta);
+		g.drawLine((int)eixoP1.X, (int)eixoP1.Y, (int)eixoP2.X, (int)eixoP2.Y);
+		g.fillOval((int)eixoP1.X-3, (int)eixoP1.Y-3, 6, 6);
+		g.fillOval((int)eixoP2.X-3, (int)eixoP2.Y-3, 6, 6);
+
 		g.setColor(Color.red);
 		if(p0!=null) {
 			g.drawLine((int)p0.X, (int)p0.Y, mouseX, mouseY);
@@ -425,6 +439,13 @@ public class MainCanvas extends JPanel implements Runnable{
 		Matriz4x4 composta = Matriz4x4.translacao(cx, cy, cz).multiplica(m).multiplica(Matriz4x4.translacao(-cx, -cy, -cz));
 		for(int i = 0; i < triangulos.size();i++) {
 			triangulos.get(i).transforma(composta);
+		}
+	}
+
+	public void rotacionaObjetoEixo(float ang) {
+		Matriz4x4 m = Matriz4x4.rotacaoEixoPontos(eixoP1, eixoP2, ang);
+		for(int i = 0; i < triangulos.size();i++) {
+			triangulos.get(i).transforma(m);
 		}
 	}
 
