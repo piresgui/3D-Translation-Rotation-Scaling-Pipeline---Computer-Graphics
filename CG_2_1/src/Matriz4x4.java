@@ -87,6 +87,17 @@ public class Matriz4x4 {
 		return r;
 	}
 
+	public static Matriz4x4 projecaoObliqua(float angulo, float l) {
+		float cos = (float)Math.cos(angulo);
+		float sin = (float)Math.sin(angulo);
+
+		Matriz4x4 r = new Matriz4x4();
+		r.m[0][2] = l*cos;
+		r.m[1][2] = l*sin;
+		r.m[2][2] = 0;
+		return r;
+	}
+
 	public static Matriz4x4 rotacaoEixoPontos(Ponto3D p1, Ponto3D p2, float ang) {
 		float ux = p2.X - p1.X;
 		float uy = p2.Y - p1.Y;
